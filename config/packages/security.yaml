@@ -13,9 +13,6 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        admin:
-            pattern: ^/admin
-            anonymous: false
         main:
             anonymous: true
 
