@@ -15,6 +15,13 @@ security:
             security: false
         main:
             anonymous: true
+            guard:
+                authenticators:
+                    - App\Security\FormAuthenticator
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                # target: app_any_route
 
     #access_control:
     #    - { path: ^/admin, roles: ROLE_ADMIN }
