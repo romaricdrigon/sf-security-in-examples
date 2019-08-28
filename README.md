@@ -1,5 +1,7 @@
 # Symfony Security component in examples
 
+Code for the workshop "Symfony security component in examples" at WebSummerCamp 2019
+
 ## Installation
 
 ```

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit {{ article.title }}{% endblock %}
+
+{% block content %}
+    <h1>Edit {{ article.title }}</h1>
+
+    {{ form(form) }}
+
+    <p><a href="{{ path('article_view', {id: article.id}) }}" class="btn btn-outline-primary">Cancel</a></p>
+{% endblock %}

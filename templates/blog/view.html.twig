@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog {{ blog.name }}{% endblock %}
+
+{% block content %}
+    <h1>Details of {{ blog.name }}</h1>
+
+    {% for article in blog.articles %}
+        <h2>{{ article.title }}</h2>
+
+        <p>{{ article.content|slice(0, 140) ~ '…' }}</p>
+
+        <p><a href="{{ path('article_view', {id: article.id}) }}">Read more</a></p>
+    {% endfor %}
+
+    <p><a href="{{ path('blog_edit', {id: blog.id}) }}" class="btn btn-outline-warning">Edit</a></p>
+{% endblock %}

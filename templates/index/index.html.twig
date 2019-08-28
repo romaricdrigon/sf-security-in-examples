@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Index{% endblock %}
+
+{% block content %}
+    <h1>Blog list</h1>
+
+    <ul class="mt-5">
+        {% for blog in blogs %}
+            <li><strong>{{ blog.name }}</strong> - <a href="{{ path('blog_view', {id: blog.id}) }}">View articles</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
@@ -13,6 +14,8 @@ class Article
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @Groups("api_blogs")
      */
     private $id;
 
@@ -24,11 +27,15 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups("api_blogs")
      */
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     *
+     * @Groups("api_blogs")
      */
     private $content;
 
