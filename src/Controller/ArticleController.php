@@ -26,7 +26,7 @@ class ArticleController extends AbstractController
     /**
      * @ParamConverter("article")
      * @Route("/article/{id}/edit", name="article_edit")
-     * @Security("is_granted('ROLE_ADMIN') and article.getBlog().getOwner().getId() == user.getId()")
+     * @Security("is_granted('CAN_EDIT', article)")
      */
     public function edit(Article $article, Request $request)
     {
