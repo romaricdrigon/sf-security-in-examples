@@ -26,7 +26,7 @@ class BlogController extends AbstractController
     /**
      * @ParamConverter("blog")
      * @Route("/blog/{id}/edit", name="blog_edit")
-     * @Security("is_granted('ROLE_ADMIN') and blog.getOwner().getId() == user.getId()")
+     * @Security("is_granted('CAN_EDIT', blog)")
      */
     public function edit(Blog $blog, Request $request)
     {
