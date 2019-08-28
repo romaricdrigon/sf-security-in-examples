@@ -6,10 +6,20 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ApiControllerTest extends WebTestCase
 {
-    public function testBlogsApi()
+    public function testAuthenticationFailure()
     {
         $client = static::createClient();
         $client->request('GET', '/api/blogs');
+
+        $this->assertResponseStatusCodeSame(401);
+    }
+
+    public function testBlogsApi()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/api/blogs', [], [], [
+            'HTTP_Authorization' => 'TESTAPIKEY',
+        ]);
 
         $this->assertResponseIsSuccessful();
 
