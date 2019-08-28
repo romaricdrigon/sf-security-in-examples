@@ -35,6 +35,11 @@ class Blog
      */
     private $articles;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     */
+    private $owner;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -84,6 +89,18 @@ class Blog
                 $article->setBlog(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }
