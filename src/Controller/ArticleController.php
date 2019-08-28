@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Form\ArticleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,6 +26,7 @@ class ArticleController extends AbstractController
     /**
      * @ParamConverter("article")
      * @Route("/article/{id}/edit", name="article_edit")
+     * @Security("is_granted('ROLE_ADMIN') and article.getBlog().getOwner().getId() == user.getId()")
      */
     public function edit(Article $article, Request $request)
     {

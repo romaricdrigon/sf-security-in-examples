@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Blog;
 use App\Form\BlogType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,6 +26,7 @@ class BlogController extends AbstractController
     /**
      * @ParamConverter("blog")
      * @Route("/blog/{id}/edit", name="blog_edit")
+     * @Security("is_granted('ROLE_ADMIN') and blog.getOwner().getId() == user.getId()")
      */
     public function edit(Blog $blog, Request $request)
     {
