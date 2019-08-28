@@ -4,15 +4,41 @@ namespace App\DataFixtures;
 
 use App\Entity\Article;
 use App\Entity\Blog;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
+    private $encoder;
+
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder = $encoder;
+    }
+
     public function load(ObjectManager $manager)
     {
+        $romaric = (new User())
+            ->setEmail('romaric.drigon@gmail.com')
+        ;
+        $password = $this->encoder->encodePassword($romaric, 'mysecretpassword');
+        $romaric->setPassword($password);
+
+        $manager->persist($romaric);
+
+        $ivo = (new User())
+            ->setEmail('ivo@netgen.io')
+        ;
+        $passwordIvo = $this->encoder->encodePassword($ivo, 'shhhtTellNoOne!');
+        $ivo->setPassword($passwordIvo);
+
+        $manager->persist($ivo);
+
         $webBlog = (new Blog())
             ->setName('Web Summer Camp official blog')
+            ->setOwner($ivo)
         ;
 
         $manager->persist($webBlog);
@@ -28,7 +54,9 @@ class AppFixtures extends Fixture
         $manager->persist($welcomeArticle);
 
         $rdBlog = (new Blog())
-            ->setName('Romaric Drigon\'s blog');
+            ->setName('Romaric Drigon\'s blog')
+            ->setOwner($romaric)
+        ;
 
         $manager->persist($rdBlog);
 
