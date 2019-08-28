@@ -22,6 +22,7 @@ class AppFixtures extends Fixture
     {
         $romaric = (new User())
             ->setEmail('romaric.drigon@gmail.com')
+            ->setRoles(['ROLE_ADMIN'])
         ;
         $password = $this->encoder->encodePassword($romaric, 'mysecretpassword');
         $romaric->setPassword($password);
