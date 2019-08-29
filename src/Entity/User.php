@@ -33,6 +33,17 @@ class User implements UserInterface
      */
     private $password;
 
+    /**
+     * @ORM\Column(type="date_immutable", nullable=true)
+     */
+    private $expiresAt;
+
+    public function __construct()
+    {
+        // We decided that users are valid for one month
+        $this->expiresAt = new \DateTimeImmutable('+1 month');
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -109,5 +120,10 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function isExpired(): bool
+    {
+        return new \DateTimeImmutable('now') <= $this->expiresAt;
     }
 }
