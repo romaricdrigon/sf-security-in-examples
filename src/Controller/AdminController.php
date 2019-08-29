@@ -15,7 +15,7 @@ class AdminController extends AbstractController
      */
     public function index()
     {
-        // TODO: should be only Blogs I can admin
+        // Doctrine filter will filter only Blogs I own
         $blogs = $this->getDoctrine()->getRepository(Blog::class)->findAll();
 
         return $this->render('admin/index.html.twig', [
