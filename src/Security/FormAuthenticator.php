@@ -18,6 +18,8 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class FormAuthenticator extends AbstractFormLoginAuthenticator
 {
@@ -27,13 +29,18 @@ class FormAuthenticator extends AbstractFormLoginAuthenticator
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    private $validator;
+    private $passwordCompromised;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->validator = $validator;
+
+        $this->passwordCompromised = false;
     }
 
     public function supports(Request $request)
@@ -76,11 +83,23 @@ class FormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
+        // Here is the last place where we can read cleartext password
+        // We use the new "NotCompromisedPassword", based on HaveIBeenPwned API
+        $result = $this->validator->validate($credentials['password'], [new NotCompromisedPassword()]);
+
+        if (0 !== count($result)) {
+            $this->passwordCompromised = true;
+        }
+
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        if ($this->passwordCompromised) {
+            return new RedirectResponse($this->urlGenerator->generate('app_compromised_password'));
+        }
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }

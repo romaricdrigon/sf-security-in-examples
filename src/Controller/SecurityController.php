@@ -33,4 +33,12 @@ class SecurityController extends AbstractController
     {
         throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
     }
+
+    /**
+     * @Route("/compromised-password", name="app_compromised_password")
+     */
+    public function compromisedPasswordWarning()
+    {
+        return $this->render('security/compromised_password.html.twig');
+    }
 }
